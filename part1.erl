@@ -1,5 +1,5 @@
 -module(part1).
--export([fib/1, adjacent_duplicates/1, deep_sum/1]).
+-export([fib/1, adjacent_duplicates/1, deep_sum/1, concatenate_all/1]).
 
 % A function for calculating the Fibonacci Sequence.
 fib(N)           when N < 0  -> "Error: sequence number must be 0 or greater.";
@@ -30,3 +30,6 @@ deep_sum(L) -> deep_sum(lists:flatten(L), 0).
 % A helper function for summing a deep list.
 deep_sum(L, I) when L == [] -> I;
 deep_sum(L, I)              -> deep_sum(tl(L), I+hd(L)).
+
+% A function for concatenating strings.
+concatenate_all(L) -> lists:flatten(L).
