@@ -1,5 +1,5 @@
 -module(part1).
--export([fib/1, adjacent_duplicates/1]).
+-export([fib/1, adjacent_duplicates/1, deep_sum/1]).
 
 % A function for calculating the Fibonacci Sequence.
 fib(N)           when N < 0  -> "Error: sequence number must be 0 or greater.";
@@ -23,3 +23,10 @@ adjacent_duplicates(_, T, N)                       -> adjacent_duplicates(hd(T),
 % A helper function to reverse the duplicates list.
 reverseDuplicates(H, T) when T == [] -> H;
 reverseDuplicates(H, T)              -> reverseDuplicates([hd(T)|H], tl(T)).
+
+% A function to sum a list of integers.
+deep_sum(L) -> deep_sum(lists:flatten(L), 0).
+
+% A helper function for summing a deep list.
+deep_sum(L, I) when L == [] -> I;
+deep_sum(L, I)              -> deep_sum(tl(L), I+hd(L)).
