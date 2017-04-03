@@ -1,5 +1,5 @@
 -module(part1).
--export([fib/1, adjacent_duplicates/1, deep_sum/1, concatenate_all/1]).
+-export([fib/1, adjacent_duplicates/1, deep_sum/1, concatenate_all/1, perimeter/1]).
 
 % A function for calculating the Fibonacci Sequence.
 fib(N)           when N < 0  -> "Error: sequence number must be 0 or greater.";
@@ -33,3 +33,8 @@ deep_sum(L, I)              -> deep_sum(tl(L), I+hd(L)).
 
 % A function for concatenating strings.
 concatenate_all(L) -> lists:flatten(L).
+
+% A function to calculate the perimeter of a shape.
+perimeter(Shape) when element(1, Shape) == circle         -> 2 *  3.14 * element(2, Shape);
+perimeter(Shape) when element(1, Shape) == rectangle      -> (element(2, Shape) * 2) + (element(3, Shape) * 2);
+perimeter(Shape) when element(1, Shape) == right_triangle -> element(2, Shape) + element(3, Shape) + element(4, Shape).
