@@ -1,5 +1,5 @@
 -module(part1).
--export([fib/1, adjacent_duplicates/1, deep_sum/1, concatenate_all/1, perimeter/1]).
+-export([fib/1, adjacent_duplicates/1, deep_sum/1, concatenate_all/1, perimeter/1, permutations/1]).
 
 % A function for calculating the Fibonacci Sequence.
 fib(N)           when N < 0  -> "Error: sequence number must be 0 or greater.";
@@ -8,7 +8,7 @@ fib(N)           when N > 0  -> fib(N, 1, 0, 1).
 
 % A helper function for calculating the Fibonacci Sequence.
 fib(N, A, _, C) when N =< A -> C;
-fib(N, A, B, C)  when N > A -> fib(N, A + 1, C, B + C).
+fib(N, A, B, C) when N > A  -> fib(N, A + 1, C, B + C).
 
 % A function to return duplicates from a list where they are adjacent.
 adjacent_duplicates(L) when L == [] -> [];
@@ -38,3 +38,7 @@ concatenate_all(L) -> lists:flatten(L).
 perimeter(Shape) when element(1, Shape) == circle         -> 2 *  3.14 * element(2, Shape);
 perimeter(Shape) when element(1, Shape) == rectangle      -> (element(2, Shape) * 2) + (element(3, Shape) * 2);
 perimeter(Shape) when element(1, Shape) == right_triangle -> element(2, Shape) + element(3, Shape) + element(4, Shape).
+
+% Returns all permutations of the list passed to the function.
+permutations([]) -> [[]];
+permutations(L) -> [[H|T] || H <- L, T <- permutations(L--[H])].
