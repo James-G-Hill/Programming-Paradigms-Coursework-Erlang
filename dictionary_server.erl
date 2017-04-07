@@ -1,5 +1,10 @@
 -module(dictionary_server).
--export([start/0, stop/0]).
+-export([start/0, stop/0, insert/2]).
+
+%% The record structure.
+
+-record(item, {key, value}).
+
 
 %% Functions for creating and initializing the server.
 
@@ -12,7 +17,8 @@ init() ->
 
 %% Client functions.
 
-stop() -> call(stop).
+stop()   -> call(stop).
+insert(K, V) -> call({insert, K, V}).
 
 
 %% Message passing.
@@ -30,8 +36,9 @@ end.
 loop() ->
     receive
 	{request, Pid, stop} ->
-	    reply(Pid, ok)
+	    reply(Pid, stopped), loop();
+	{request, Pid, {insert, K, V}} ->
+	    #item{key=K, value=V}, reply(Pid, inserted), loop()
 end.
 
-reply(Pid, Message) ->
-    Pid ! {reply, Message}.
+reply(Pid, Message) -> Pid ! {reply, Message}.
