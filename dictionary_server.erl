@@ -1,5 +1,5 @@
 -module(dictionary_server).
--export([start/0, stop/0, insert/2, lookup/1, remove/1]).
+-export([start/0, stop/0, insert/2, lookup/1, remove/1, clear/0]).
 
 %% The record structure.
 
@@ -21,6 +21,7 @@ stop()       -> call(stop).
 insert(K, V) -> call({insert, K, V}).
 lookup(K)    -> call({lookup, K}).
 remove(K)    -> call({remove, K}).
+clear()      -> call(clear).
 
 
 %% Message passing.
@@ -40,7 +41,9 @@ loop() ->
 	{request, Pid, stop}           ->
 	    reply(Pid, ok);
 	{request, Pid, {insert, K, V}} ->
-	    put(K, V), reply(Pid, ok), loop();
+	    put(K, V),
+	    reply(Pid, ok),
+	    loop();
 	{request, Pid, {lookup, K}}    ->
 	    V = get(K),
 	    if
@@ -48,12 +51,16 @@ loop() ->
 		true           -> reply(Pid, {ok, V})
 	    end,
 	    loop();
-	{request, Pid, {remove, K}} ->
+	{request, Pid, {remove, K}}    ->
 	    V = erase(K),
 	    if
 		V == undefined -> reply(Pid, notfound);
 		true           -> reply(Pid, ok)
 	    end,
+	    loop();
+	{request, Pid, clear}          ->
+	    erlang:erase(),
+	    reply(Pid, erased),
 	    loop()
 end.
 
