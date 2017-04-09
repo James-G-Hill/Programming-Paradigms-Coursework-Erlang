@@ -1,6 +1,7 @@
 -module(dictionary_server).
 -export([start/0, stop/0, insert/2, lookup/1, remove/1, clear/0, size/0]).
 
+
 %% Functions for creating and initializing the server.
 
 start() ->
@@ -56,12 +57,15 @@ loop(D) ->
 		true       -> reply(Pid, ok)
 	    end,
 	    loop(D2);
-	{request, Pid, clear}            ->
+	{request, Pid, clear}          ->
 	    reply(Pid, cleared),
 	    loop(dict:new());
 	{request, Pid, size}           ->
 	    reply(Pid, dict:size(D)),
 	    loop(D)
 end.
+
+
+%% A reply function.
 
 reply(Pid, Message) -> Pid ! {reply, Message}.
