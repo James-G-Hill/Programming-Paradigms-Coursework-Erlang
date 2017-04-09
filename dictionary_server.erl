@@ -1,5 +1,5 @@
 -module(dictionary_server).
--export([start/0, stop/0, insert/2, lookup/1]).
+-export([start/0, stop/0, insert/2, lookup/1, remove/1]).
 
 %% The record structure.
 
@@ -20,6 +20,8 @@ init() ->
 stop()       -> call(stop).
 insert(K, V) -> call({insert, K, V}).
 lookup(K)    -> call({lookup, K}).
+remove(K)    -> call({remove, K}).
+
 
 %% Message passing.
 
@@ -44,6 +46,13 @@ loop() ->
 	    if
 		V == undefined -> reply(Pid, notfound);
 		true           -> reply(Pid, {ok, V})
+	    end,
+	    loop();
+	{request, Pid, {remove, K}} ->
+	    V = erase(K),
+	    if
+		V == undefined -> reply(Pid, notfound);
+		true           -> reply(Pid, ok)
 	    end,
 	    loop()
 end.
